@@ -28,8 +28,8 @@ const Dashboard = () => {
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <div className="w-64 bg-gray-800 text-white p-4">
-        <h2 className="text-2xl font-semibold text-center mb-8">ECMOCER Admin Panel</h2>
-        <ul className="space-y-4">
+        <h2 className="text-2xl font-semibold text-center mb-20">Food Tuck Restaurant</h2>
+        <ul className="space-y-10">
           <li><Link href="/admin/dashboard" className="hover:bg-gray-700 p-2 rounded-md">Dashboard</Link></li>
           <li><Link href="/admin/orders" className="hover:bg-gray-700 p-2 rounded-md">Orders</Link></li>
           <li><Link href="/admin/products" className="hover:bg-gray-700 p-2 rounded-md">Products</Link></li>

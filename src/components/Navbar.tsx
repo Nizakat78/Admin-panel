@@ -41,7 +41,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="text-2xl font-semibold">
-          <a href="/" className="text-white hover:text-gray-300">ECMOCER Admin Panel</a>
+          <a href="/" className="text-white hover:text-gray-300">Food Tuck Restaurant Admin Panel</a>
         </div>
 
         {/* Desktop Links */}
