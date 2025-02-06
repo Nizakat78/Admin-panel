@@ -1,6 +1,4 @@
-// src/app/login/page.tsx
-
-"use client";  // This file is client-side
+"use client"; // This file is client-side
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";  // useRouter to navigate after login
@@ -16,13 +14,21 @@ const Login = () => {
     const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
     const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
 
-    // Validate login credentials (Example)
-    if (email === adminEmail && password === adminPassword) {
-      // Save to localStorage to simulate a logged-in user
-      localStorage.setItem("adminToken", "authenticated");  // You can store a more secure token here
+    // Debugging: Log environment variables to check if they're loaded properly
+    console.log("Admin Email from env:", adminEmail);
+    console.log("Admin Password from env:", adminPassword);
+    console.log("Entered email:", email);
+    console.log("Entered password:", password);
 
-      router.push("/admin/dashboard");  // Redirect to dashboard after login
+    // Ensure values are trimmed to avoid errors from extra spaces
+    if (email.trim() === adminEmail?.trim() && password.trim() === adminPassword?.trim()) {
+      // If the credentials match, simulate login by saving to localStorage
+      localStorage.setItem("adminToken", "authenticated");
+
+      // Redirect to the dashboard after successful login
+      router.push("/admin/dashboard");
     } else {
+      // Show error if credentials don't match
       alert("Invalid credentials");
     }
   };
