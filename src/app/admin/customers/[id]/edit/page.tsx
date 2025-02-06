@@ -1,131 +1,106 @@
-
 // src/app/admin/customers/[id]/edit/page.tsx
 
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { useRouter, usePathname } from "next/navigation";
+import { useParams } from 'next/navigation';
 
-const EditCustomerPage = ({ params }: { params: { id: string } }) => {
+const CustomerEditPage = () => {
+  const { id } = useParams(); // Access dynamic `id` from the URL
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [customer, setCustomer] = useState<any | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [status, setStatus] = useState("Active");
   const router = useRouter();
-  const { id } = params; // Customer ID passed through URL
 
-  // Fetch customer details (mocked here for example)
   useEffect(() => {
-    const fetchCustomerDetails = async () => {
-      // Replace this with an actual API call to fetch the customer's details
-      const fetchedCustomer = {
-        id: Number(id),
-        name: "John Doe",
-        email: "john@example.com",
-        phone: "123-456-7890",
-        address: "123 Main St, Cityville",
-        status: "Active",
-      };
-
+    const fetchCustomer = async () => {
+      // Replace this with an actual API call to fetch customer data by ID
+      const fetchedCustomer = { id, name: "John Doe", email: "john@example.com", phone: "123-456-7890", status: "Active" };
       setCustomer(fetchedCustomer);
+      setName(fetchedCustomer.name);
+      setEmail(fetchedCustomer.email);
+      setPhone(fetchedCustomer.phone);
+      setStatus(fetchedCustomer.status);
     };
 
-    fetchCustomerDetails();
+    if (id) {
+      fetchCustomer();
+    }
   }, [id]);
 
-  if (!customer) return <div>Loading...</div>;
-
-  // Handle form submission (mocked here for example)
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    setIsSaving(true);
-    // Replace with an actual API call to update the customer details
-    setTimeout(() => {
-      alert("Customer updated successfully!");
-      setIsSaving(false);
-      router.push(`/admin/customers/${id}`); // Redirect to customer details page after edit
-    }, 1000);
+  const handleSave = () => {
+    // Handle save logic (API call to save edited data)
+    alert("Customer details updated!");
+    router.push("/admin/customers"); // Redirect back to customers list page
   };
+
+  if (!customer) return <div>Loading...</div>;
 
   return (
     <div className="p-6">
       <h1 className="text-3xl font-semibold text-gray-800 mb-6">Edit Customer</h1>
+      
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
 
-      <div className="bg-white shadow-lg rounded-lg p-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700" htmlFor="name">
-              Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={customer.name}
-              onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
-              className="mt-2 block w-full p-3 border border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700" htmlFor="email">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={customer.email}
-              onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
-              className="mt-2 block w-full p-3 border border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700" htmlFor="phone">
-              Phone
-            </label>
-            <input
-              id="phone"
-              type="tel"
-              value={customer.phone}
-              onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
-              className="mt-2 block w-full p-3 border border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700" htmlFor="address">
-              Address
-            </label>
-            <input
-              id="address"
-              type="text"
-              value={customer.address}
-              onChange={(e) => setCustomer({ ...customer, address: e.target.value })}
-              className="mt-2 block w-full p-3 border border-gray-300 rounded-md"
-              required
-            />
-          </div>
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
 
-          <div className="mt-4 flex justify-between">
-            <button
-              onClick={() => router.push(`/admin/customers/${customer.id}`)}
-              type="button"
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-              disabled={isSaving}
-            >
-              {isSaving ? "Saving..." : "Save Changes"}
-            </button>
-          </div>
-        </form>
+        <div className="mb-4">
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
+          <input
+            type="text"
+            id="phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="status" className="block text-sm font-medium text-gray-700">Status</label>
+          <select
+            id="status"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          >
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+
+        <button
+          onClick={handleSave}
+          className="mt-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+        >
+          Save Changes
+        </button>
       </div>
     </div>
   );
 };
 
-export default EditCustomerPage;
+export default CustomerEditPage;

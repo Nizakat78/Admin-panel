@@ -1,10 +1,9 @@
-// src/app/admin/dashboard/page.tsx
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CgProfile } from "react-icons/cg"; // Profile icon
+import Link from "next/link"; // Import Link component
 
 const Dashboard = () => {
   const [adminName, setAdminName] = useState<string | null>(null);
@@ -31,11 +30,11 @@ const Dashboard = () => {
       <div className="w-64 bg-gray-800 text-white p-4">
         <h2 className="text-2xl font-semibold text-center mb-8">ECMOCER Admin Panel</h2>
         <ul className="space-y-4">
-          <li><a href="/admin/dashboard" className="hover:bg-gray-700 p-2 rounded-md">Dashboard</a></li>
-          <li><a href="/admin/orders" className="hover:bg-gray-700 p-2 rounded-md">Orders</a></li>
-          <li><a href="/admin/products" className="hover:bg-gray-700 p-2 rounded-md">Products</a></li>
-          <li><a href="/admin/customers" className="hover:bg-gray-700 p-2 rounded-md">Customers</a></li>
-          <li><a href="/admin/settings" className="hover:bg-gray-700 p-2 rounded-md">Settings</a></li>
+          <li><Link href="/admin/dashboard" className="hover:bg-gray-700 p-2 rounded-md">Dashboard</Link></li>
+          <li><Link href="/admin/orders" className="hover:bg-gray-700 p-2 rounded-md">Orders</Link></li>
+          <li><Link href="/admin/products" className="hover:bg-gray-700 p-2 rounded-md">Products</Link></li>
+          <li><Link href="/admin/customers" className="hover:bg-gray-700 p-2 rounded-md">Customers</Link></li>
+          <li><Link href="/admin/settings" className="hover:bg-gray-700 p-2 rounded-md">Settings</Link></li>
         </ul>
       </div>
 
