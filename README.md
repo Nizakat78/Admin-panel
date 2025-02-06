@@ -1,3 +1,64 @@
+# Admin Panel Overview  
+
+This admin panel provides tools for managing orders, products, customers, and settings.  
+
+## **Dashboard (Home Page)**  
+The first page of the admin panel displays key business metrics:  
+- **Total Orders** – The total number of orders received.  
+- **Total Products** – The total number of available products or food items.  
+- **Total Customers** – The total number of registered customers.  
+- **Recent Activity** – Displays the latest actions performed, such as new orders, customer registrations, or product updates.  
+
+## **Customer Management**  
+- **Search Customers** – Find customers by name.  
+- **Customer Details** – View a customer's profile, order history, and contact information.  
+
+## **Order Management**  
+- **Order Search** – Search for orders using filters.  
+- **Order List** – Displays:  
+  - **Order ID**  
+  - **Customer Name**  
+  - **Total Amount**  
+  - **Status (Pending, Processing, Completed, or Canceled)**  
+  - **Date**  
+  - **Actions (View, Edit, Delete)**  
+- **View Order Details** – Clicking on an order shows:  
+  - List of items purchased  
+  - Quantity and prices  
+  - Payment method  
+  - Delivery address  
+  - Order history and updates  
+
+## **Product / Food Management**  
+- **Add New Product / Food Item** – Enter name, description, price, and images.  
+- **Edit Existing Products** – Modify product details or update prices.  
+- **Remove Products** – Delete unavailable items.  
+- **Stock Management** – Keep track of available stock.  
+
+## **Settings Page**  
+- The settings page currently contains a **User Interface (UI)** but no working functions.  
+- Future updates will introduce additional settings features.  
+
+## **Future Enhancements (Planned Updates)**  
+- **User Roles & Permissions** – Define admin, manager, and staff roles.  
+- **Order Tracking System** – Provide customers with real-time tracking.  
+- **Analytics & Reports** – Generate reports on sales and customer activity.  
+- **Promotions & Discounts** – Implement coupon codes and special offers.  
+- **Automated Notifications** – Send email/SMS alerts for order updates and promotions.  
+
+---
+
+## **How to Use**  
+1. Clone the project repository.  
+2. Install necessary dependencies.  
+3. Run the admin panel in a local development environment.  
+4. Navigate through different sections to manage customers, orders, and products.  
+
+
+
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
