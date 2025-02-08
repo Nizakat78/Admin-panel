@@ -1,4 +1,3 @@
-
 export default {
   name: 'food',
   type: 'document',
@@ -43,6 +42,12 @@ export default {
       options: {
         hotspot: true,
       },
+    },
+    {
+      name: 'imageUrl',
+      type: 'url', // New field for storing external image URL
+      title: 'External Image URL',
+      description: 'Enter the URL for an external image (if not using Sanity image)',
     },
     {
       name: 'description',

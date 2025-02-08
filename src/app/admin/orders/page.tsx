@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Correct import for navigation in Next.js 13+
+import { client } from "../../../sanity/lib/sanityClient"; // Import Sanity client
 
 const OrdersPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,42 +12,51 @@ const OrdersPage = () => {
   const [searchQuery, setSearchQuery] = useState(""); // Search query for filtering
   const router = useRouter();
 
-  // Mocked orders data (In real-world scenario, data can be fetched from an API)
+  // Fetch orders data from Sanity
   useEffect(() => {
     const fetchOrders = async () => {
-      // Example of fetching data (replace with actual API call)
-      setOrders([
-        {
-          id: "1",
-          customerName: "John Doe",
-          totalAmount: "$120.00",
-          status: "Pending",
-          date: "2025-02-05",
-        },
-        {
-          id: "2",
-          customerName: "Jane Smith",
-          totalAmount: "$200.00",
-          status: "Shipped",
-          date: "2025-02-04",
-        },
-        {
-          id: "3",
-          customerName: "Sam Wilson",
-          totalAmount: "$95.00",
-          status: "Delivered",
-          date: "2025-02-03",
-        },
-      ]);
+      try {
+        const ordersData = await client.fetch(
+          `*[_type == "order"] {
+            _id,
+            userId,
+            items[] {
+              name,
+              price,
+              quantity,
+              image
+            },
+            shippingDetails {
+              firstName,
+              lastName,
+              email,
+              phone,
+              country,
+              city,
+              zipCode
+            },
+            total,
+            status,
+            createdAt
+          }`
+        );
+        setOrders(ordersData);
+      } catch (error) {
+        console.error("Error fetching orders: ", error);
+      }
     };
 
     fetchOrders();
   }, []);
 
   // Handle search functionality
-  const filteredOrders = orders.filter((order) =>
-    order.customerName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredOrders = orders.filter((order) => {
+    // Make sure shippingDetails exists before accessing its properties
+    const shippingDetails = order.shippingDetails || {};
+    const fullName = `${shippingDetails.firstName || ''} ${shippingDetails.lastName || ''}`.toLowerCase();
+
+    return fullName.includes(searchQuery.toLowerCase());
+  });
 
   return (
     <div className="p-6">
@@ -79,16 +89,18 @@ const OrdersPage = () => {
           <tbody>
             {filteredOrders.length > 0 ? (
               filteredOrders.map((order) => (
-                <tr key={order.id} className="border-b hover:bg-gray-100">
-                  <td className="px-6 py-4">{order.id}</td>
-                  <td className="px-6 py-4">{order.customerName}</td>
-                  <td className="px-6 py-4">{order.totalAmount}</td>
+                <tr key={order._id} className="border-b hover:bg-gray-100">
+                  <td className="px-6 py-4">{order._id}</td>
+                  <td className="px-6 py-4">
+                    {order.shippingDetails?.firstName} {order.shippingDetails?.lastName}
+                  </td>
+                  <td className="px-6 py-4">${order.total}</td>
                   <td className="px-6 py-4">{order.status}</td>
-                  <td className="px-6 py-4">{order.date}</td>
+                  <td className="px-6 py-4">{new Date(order.createdAt).toLocaleDateString()}</td>
                   <td className="px-6 py-4">
                     <button
                       className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
-                      onClick={() => router.push(`/admin/orders/${order.id}`)} // Navigate to order details page
+                      onClick={() => router.push(`/admin/orders/${order._id}`)} // Navigate to order details page
                     >
                       View Details
                     </button>

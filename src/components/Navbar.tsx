@@ -48,7 +48,7 @@ const Navbar = () => {
         <div className="hidden lg:flex space-x-8">
           <a href="/admin/dashboard" className="text-white hover:text-gray-300">Dashboard</a>
           <a href="/admin/orders" className="text-white hover:text-gray-300">Orders</a>
-          <a href="/admin/products" className="text-white hover:text-gray-300">Products</a>
+          <a href="/admin/products" className="text-white hover:text-gray-300">Foods</a>
           <a href="/admin/customers" className="text-white hover:text-gray-300">Customers</a>
           <a href="/admin/settings" className="text-white hover:text-gray-300">Settings</a>
         </div>

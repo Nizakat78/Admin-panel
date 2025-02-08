@@ -6,28 +6,46 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Correct import for navigation in Next.js 13+
 import { useParams } from "next/navigation"; // To get the dynamic route params
+import { client } from "../../../../sanity/lib/sanityClient";
 
 const OrderDetailsPage = () => {
   const { orderId } = useParams(); // Get the dynamic orderId from the URL
   const [orderDetails, setOrderDetails] = useState<any | null>(null); // State to hold order details
   const router = useRouter();
 
-  // Fetching order details (replace with actual API call)
+  // Fetching order details from Sanity
   useEffect(() => {
     const fetchOrderDetails = async () => {
-      // Example of mocked order details data (Replace this with actual API call)
-      const orderData = {
-        id: orderId,
-        customerName: "John Doe",
-        totalAmount: "$120.00",
-        status: "Pending",
-        date: "2025-02-05",
-        items: [
-          { id: "1", name: "Product 1", quantity: 2, price: "$50.00" },
-          { id: "2", name: "Product 2", quantity: 1, price: "$20.00" },
-        ],
-      };
-      setOrderDetails(orderData);
+      try {
+        const orderData = await client.fetch(
+          `*[_type == "order" && _id == $orderId] {
+            _id,
+            userId,
+            items[] {
+              name,
+              price,
+              quantity,
+              image
+            },
+            shippingDetails {
+              firstName,
+              lastName,
+              email,
+              phone,
+              country,
+              city,
+              zipCode
+            },
+            total,
+            status,
+            createdAt
+          }[0]`, // Only fetch the first order that matches the orderId
+          { orderId }
+        );
+        setOrderDetails(orderData);
+      } catch (error) {
+        console.error("Error fetching order details: ", error);
+      }
     };
 
     fetchOrderDetails();
@@ -56,10 +74,10 @@ const OrderDetailsPage = () => {
 
       {/* Order Summary */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h2 className="text-2xl font-bold mb-4">Order #{orderDetails.id}</h2>
-        <p className="text-sm mb-2">Customer: {orderDetails.customerName}</p>
-        <p className="text-sm mb-2">Order Date: {orderDetails.date}</p>
-        <p className="text-sm mb-2">Total Amount: {orderDetails.totalAmount}</p>
+        <h2 className="text-2xl font-bold mb-4">Order #{orderDetails._id}</h2>
+        <p className="text-sm mb-2">Customer: {orderDetails.shippingDetails?.firstName} {orderDetails.shippingDetails?.lastName}</p>
+        <p className="text-sm mb-2">Order Date: {new Date(orderDetails.createdAt).toLocaleDateString()}</p>
+        <p className="text-sm mb-2">Total Amount: ${orderDetails.total}</p>
         <p className="text-sm mb-2">Status: {orderDetails.status}</p>
       </div>
 
@@ -76,13 +94,13 @@ const OrderDetailsPage = () => {
             </tr>
           </thead>
           <tbody>
-            {orderDetails.items.map((item: any) => (
-              <tr key={item.id} className="border-b hover:bg-gray-100">
+            {orderDetails.items?.map((item: any) => (
+              <tr key={item._id} className="border-b hover:bg-gray-100">
                 <td className="px-6 py-4">{item.name}</td>
                 <td className="px-6 py-4">{item.quantity}</td>
-                <td className="px-6 py-4">{item.price}</td>
+                <td className="px-6 py-4">${item.price}</td>
                 <td className="px-6 py-4">
-                  ${(parseFloat(item.price.replace("$", "")) * item.quantity).toFixed(2)}
+                  ${(item.price * item.quantity).toFixed(2)} {/* Now multiply price directly */}
                 </td>
               </tr>
             ))}
